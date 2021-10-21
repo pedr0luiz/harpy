@@ -43,14 +43,14 @@ class _RefreshButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final config = context.watch<ConfigCubit>().state;
-    final bloc = context.watch<HomeTimelineBloc>();
+    final bloc = context.watch<NewHomeTimelineBloc>();
 
     return HarpyButton.raised(
       padding: config.edgeInsets,
       elevation: 0,
       backgroundColor: theme.cardTheme.color,
       icon: const Icon(CupertinoIcons.refresh),
-      onTap: () => bloc.add(const RefreshHomeTimeline(clearPrevious: true)),
+      onTap: () => bloc.add(const RefreshTimeline(clearPrevious: true)),
     );
   }
 }
@@ -80,11 +80,13 @@ class _FilterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final config = context.watch<ConfigCubit>().state;
-    final bloc = context.watch<HomeTimelineBloc>();
+    final bloc = context.watch<NewHomeTimelineBloc>();
     final state = bloc.state;
 
-    final hasFilter =
-        state.enableFilter && state.timelineFilter != TimelineFilter.empty;
+    // todo
+    // final hasFilter =
+    //     state.enableFilter && state.timelineFilter != TimelineFilter.empty;
+    final hasFilter = false;
 
     return HarpyButton.raised(
       padding: config.edgeInsets,

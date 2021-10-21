@@ -10,6 +10,7 @@ export 'common/find_trends_locations/widgets/dialog_content/select_find_method_c
 export 'common/find_trends_locations/widgets/find_location_dialog.dart';
 export 'common/paginated_bloc/paginated_bloc.dart';
 export 'common/replies/bloc/replies_bloc.dart';
+export 'common/timeline/bloc/timeline_bloc.dart';
 export 'common/timeline/filter/model/timeline_filter.dart';
 export 'common/timeline/filter/model/timeline_filter_model.dart';
 export 'common/timeline/filter/widgets/timeline_filter_drawer.dart';

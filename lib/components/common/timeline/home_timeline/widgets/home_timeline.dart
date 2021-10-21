@@ -37,12 +37,12 @@ class _HomeTimelineState extends State<HomeTimeline> {
     }
   }
 
-  void _blocListener(BuildContext context, HomeTimelineState state) {
+  void _blocListener(BuildContext context, TimelineState state) {
     final mediaQuery = MediaQuery.of(context);
 
-    if (state is HomeTimelineResult &&
+    if (state is TimelineResult &&
         state.initialResults &&
-        state.newTweets > 0) {
+        state.newInitialTweets > 0) {
       // scroll to the end after the list has been built
       WidgetsBinding.instance!.addPostFrameCallback((_) {
         _controller.jumpTo(
@@ -57,12 +57,12 @@ class _HomeTimelineState extends State<HomeTimeline> {
     }
   }
 
-  Widget _tweetBuilder(HomeTimelineState state, TweetData tweet) {
+  Widget _tweetBuilder(TimelineState state, TweetData tweet) {
     if (state.showNewTweetsExist(tweet.originalId)) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          NewTweetsText(state.newTweets),
+          NewTweetsText(state.newInitialTweets),
           defaultVerticalSpacer,
           HomeTimelineTweetCard(tweet),
         ],
@@ -76,10 +76,10 @@ class _HomeTimelineState extends State<HomeTimeline> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final config = context.watch<ConfigCubit>().state;
-    final bloc = context.watch<HomeTimelineBloc>();
+    final bloc = context.watch<NewHomeTimelineBloc>();
     final state = bloc.state;
 
-    return BlocListener<HomeTimelineBloc, HomeTimelineState>(
+    return BlocListener<NewHomeTimelineBloc, TimelineState>(
       listener: _blocListener,
       child: ScrollToStart(
         controller: _controller,
@@ -90,14 +90,16 @@ class _HomeTimelineState extends State<HomeTimeline> {
               : HomeAppBar.height(context) + config.paddingValue,
           onRefresh: () async {
             ScrollDirection.of(context)!.reset();
-            bloc.add(const RefreshHomeTimeline());
-            await bloc.refreshCompleter.future;
+            bloc.add(const RefreshTimeline());
+            // todo
+            // await bloc.refreshCompleter.future;
           },
           child: LoadMoreListener(
             listen: state.enableRequestOlder,
             onLoadMore: () async {
-              bloc.add(const RequestOlderHomeTimeline());
-              await bloc.requestOlderCompleter.future;
+              bloc.add(const RequestOlderTimeline());
+              // todo
+              // await bloc.requestOlderCompleter.future;
             },
             child: TweetList(
               state.timelineTweets,
@@ -117,21 +119,22 @@ class _HomeTimelineState extends State<HomeTimeline> {
                   SliverFillLoadingError(
                     message: const Text('no tweets found'),
                     onRetry: () => bloc.add(
-                      const RefreshHomeTimeline(clearPrevious: true),
+                      const RefreshTimeline(clearPrevious: true),
                     ),
-                    onClearFilter: state.hasTimelineFilter
-                        ? () => bloc.add(
-                              const FilterHomeTimeline(
-                                timelineFilter: TimelineFilter.empty,
-                              ),
-                            )
-                        : null,
+                    // todo
+                    // onClearFilter: state.hasTimelineFilter
+                    //     ? () => bloc.add(
+                    //           const FilterHomeTimeline(
+                    //             timelineFilter: TimelineFilter.empty,
+                    //           ),
+                    //         )
+                    //     : null,
                   )
                 else if (state.showTimelineError)
                   SliverFillLoadingError(
                     message: const Text('error loading tweets'),
                     onRetry: () => bloc.add(
-                      const RefreshHomeTimeline(clearPrevious: true),
+                      const RefreshTimeline(clearPrevious: true),
                     ),
                   )
                 else if (state.showLoadingOlder)

@@ -9,14 +9,14 @@ class HomeMediaTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.watch<HomeTimelineBloc>();
+    final bloc = context.watch<NewHomeTimelineBloc>();
     final state = bloc.state;
 
     return ChangeNotifierProvider<MediaTimelineModel>(
       create: (_) => MediaTimelineModel(
         initialTweets: bloc.state.timelineTweets,
       ),
-      child: BlocListener<HomeTimelineBloc, HomeTimelineState>(
+      child: BlocListener<NewHomeTimelineBloc, TimelineState>(
         listener: (context, state) {
           context
               .read<MediaTimelineModel>()
@@ -26,8 +26,9 @@ class HomeMediaTimeline extends StatelessWidget {
           child: LoadMoreListener(
             listen: state.enableRequestOlder,
             onLoadMore: () async {
-              bloc.add(const RequestOlderHomeTimeline());
-              await bloc.requestOlderCompleter.future;
+              bloc.add(const RequestOlderTimeline());
+              // todo
+              // await bloc.requestOlderCompleter.future;
             },
             child: MediaTimeline(
               showInitialLoading: state.showInitialLoading,

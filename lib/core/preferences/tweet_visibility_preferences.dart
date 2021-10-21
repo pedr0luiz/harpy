@@ -14,7 +14,7 @@ class TweetVisibilityPreferences {
   void updateVisibleTweet(TweetData tweet) {
     final id = int.tryParse(tweet.originalId);
 
-    if (id != null && id > lastVisibleTweet) {
+    if (id != null) {
       lastVisibleTweet = id;
     }
   }
